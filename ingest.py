@@ -130,8 +130,11 @@ class Device(object):
         return self.serial
 
     def get_config(self, cvp, veos):
+        logging.info(f"Getting configuration for {self.hostname}")
         url = f"/{self.serial}/Config/running/lines"
         response = cvp.get(url)
+        if self.hostname == 'ZHFER-SCL3010-A':
+            print(f"AYAYAYA -> {response}")
         if response and response.get("notifications"):
             parsed_config = Config(response["notifications"], self.real_to_lab)
             self.config = parsed_config.config
@@ -144,7 +147,7 @@ class Device(object):
         if not intf in self.interfaces:
             self.interfaces[intf] = link
         else:
-            logging.info(f"WARNING! duplicate interface definition, ignoring: {link}")
+            logging.info(f"WARNING! duplicate interface definition. \n\tExisting: \t{self.interfaces[intf]} \n\tNew (ignoring): {link}")
             link.ignore()
 
 class Config(object):

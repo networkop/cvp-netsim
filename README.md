@@ -12,8 +12,8 @@ git clone https://github.com/networkop/cvp-to-k8s-topo.git && cd cvp-to-k8s-topo
 ## Usage
 
 ```
-./script.py -h
-usage: script.py [-h] [-d] [-i] [-f FILTER] [-v] cvp user pwd
+./ingest.py -h
+usage: ingest.py [-h] [-d] [-i] [-f FILTER] [-v] cvp user pwd
 
 Tool to ingest topology information from CVP
 
@@ -36,7 +36,7 @@ optional arguments:
 Create artefacts for cEOS-based topology
 
 ```
-/script.py localhost:9443 cvpadmin cvpadmin1
+/ingest.py localhost:9443 cvpadmin cvpadmin1
 ```
 
 ## Example 2
@@ -44,7 +44,7 @@ Create artefacts for cEOS-based topology
 Create artefacts for vEOS-based topology only for devices that have "dc1" in their hostname
 
 ```
-./script.py -f dc1 -v localhost:9443 cvpadmin cvpadmin1
+./ingest.py -f dc1 -v localhost:9443 cvpadmin cvpadmin1
 ```
 
 ## How to use with k8s-topo
@@ -60,12 +60,13 @@ scp cvp_topology.tar.gz k8s-lab-node-1:/home/core
 Copy the artefacts into the `k8s-topo` pod
 
 ```
-kubectl cp cvp_topology.tar.gz k8s-topo:/
+kubectl cp /home/core/cvp_topology.tar.gz k8s-topo:/
 ```
 
 From inside the `k8s-topo` pod, extract the artefacts into a dedicated directory
 
 ```
+rm -rf ./lab && mkdir -p ./lab
 tar zxvf /cvp_topology.tar.gz -C lab
 ```
 
@@ -75,6 +76,12 @@ Assuming the required docker image is already [uploaded to docker registry][veos
 grep -A 1 custom_image lab/cvp_topology.yml 
 custom_image:
   dc1: "10.1.1.1:5000/veos:latest"
+```
+
+Otherwise, to use cEOS, set the `CEOS_IMAGE` environment variable (also assuming the image has been [pre-uploaded][ceos-image]):
+
+```
+export CEOS_IMAGE=$(kubectl get service docker-registry -o json | jq -r '.spec.clusterIP'):5000/ceos:4.21.5F
 ```
 
 Create the topology with `k8s-topo`
@@ -155,7 +162,20 @@ acme-dc1s1001-a                           1/1     Running   0          3m27s
 acme-dc1s1001-b                           1/1     Running   0          3m31s
 ```
 
+Connect to a device:
+
+```
+kubectl exec -it acme-dc1s1001-a bash
+sh-4.2# telnet localhost 23
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+
+acme-dc1s1001-a login: 
+```
+
 
 [meshnet-cni]: https://github.com/networkop/meshnet-cni
 [k8s-topo]: https://github.com/networkop/k8s-topo
 [veos-image]: https://github.com/networkop/docker-topo/tree/master/topo-extra-files/veos#uploading-to-docker-registry
+[ceos-image]: https://github.com/networkop/k8s-topo#private-docker-registry-setup
