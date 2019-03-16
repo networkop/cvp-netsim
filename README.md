@@ -1,4 +1,4 @@
-# cvp-to-k8s-topo
+# cvp-netvirt
 A script that creates k8s-topo (and docker-topo) compliant topology and configuration files (artefacts) based on the information extracted from Arista CloudVision Portal (CVP)
 
 ## Installation
@@ -6,7 +6,7 @@ A script that creates k8s-topo (and docker-topo) compliant topology and configur
 No installation needed, just clone this repository
 
 ```bash
-git clone https://github.com/networkop/cvp-to-k8s-topo.git && cd cvp-to-k8s-topo
+git clone https://github.com/networkop/cvp-netvirt.git && cd cvp-netvirt
 ```
 
 ## Usage
