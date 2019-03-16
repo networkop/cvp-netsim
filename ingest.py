@@ -123,8 +123,6 @@ class Device(object):
                 logging.debug(f"Converting {intf} to Ethernet{idx+1}")
                 self.real_to_lab[intf] = f"Ethernet{idx+1}"
                 idx += 1
-            elif self.hostname == 'ZHFER-SCS1001-B':
-                print(self.interfaces[intf])
 
     def key(self):
         return self.serial
@@ -133,8 +131,6 @@ class Device(object):
         logging.info(f"Getting configuration for {self.hostname}")
         url = f"/{self.serial}/Config/running/lines"
         response = cvp.get(url)
-        if self.hostname == 'ZHFER-SCL3010-A':
-            print(f"AYAYAYA -> {response}")
         if response and response.get("notifications"):
             parsed_config = Config(response["notifications"], self.real_to_lab)
             self.config = parsed_config.config
