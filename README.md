@@ -43,7 +43,7 @@ Create artefacts for cEOS-based topology
 
 ## Example 2
 
-Create artefacts for vEOS-based topology only for devices that have "dc1" in their hostname
+Create artefacts for containerised vEOS topology only for devices that have "dc1" in their hostname
 
 ```
 ./ingest.py -f dc1 -v localhost:9443 cvpadmin cvpadmin1
@@ -51,7 +51,7 @@ Create artefacts for vEOS-based topology only for devices that have "dc1" in the
 
 ## How to use with k8s-topo
 
-> Assuming that the kubernetes cluster already has [meshnet-cni][meshnet] and [k8s-topo][k8s-topo] installed
+> Assuming that the kubernetes cluster already has [meshnet-cni][meshnet-cni] and [k8s-topo][k8s-topo] installed
 
 Copy the archived artefacts to the machine with k8s cluster credentials
 
@@ -59,7 +59,7 @@ Copy the archived artefacts to the machine with k8s cluster credentials
 scp cvp_topology.tar.gz k8s-lab-node-1:/home/core
 ```
 
-Copy the artefacts into the `k8s-topo` pod
+From that machine, copy the artefacts into the `k8s-topo` pod
 
 ```
 kubectl cp /home/core/cvp_topology.tar.gz k8s-topo:/
