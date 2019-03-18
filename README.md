@@ -1,14 +1,14 @@
-# cvp-netvirt
+# cvp-netsim
 A script that creates k8s-topo (and docker-topo) compliant topology and configuration files (artefacts) based on the information extracted from Arista CloudVision Portal (CVP)
 
-![](cvp-netvirt.png)
+![](cvp-netsim.png)
 
 ## Installation
 
 No installation needed, just clone this repository
 
 ```bash
-git clone https://github.com/networkop/cvp-netvirt.git && cd cvp-netvirt
+git clone https://github.com/networkop/cvp-netsim.git && cd cvp-netsim
 ```
 
 ## Usage
