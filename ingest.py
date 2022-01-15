@@ -78,7 +78,8 @@ class CVP(object):
         response = requests.request("POST", url, data=json.dumps(data), headers=self.headers, verify=False)
         if response.status_code == 200:
             data = response.json()
-            self.cookie = f"session_id={data.get('sessionId')}"
+            self.cookie = f"access_token={data.get('sessionId')}"
+            logging.debug(f"cookie: {self.cookie}")
             logging.debug(f"Successfully authenticated on {self.ip}")
             return True
         else:
@@ -278,7 +279,7 @@ def main():
             for k,v2 in v["value"].items(): 
                 from_intf = k
                 for k,v3 in v2.items(): 
-                    to_intf = v3['_key']['neighborPort']
+                    to_intf = v3['key']['neighborPort']
                     if is_macaddress(from_intf): # Corner case for 3rd party LLDP device
                         from_intf = "eth0"
                     elif is_macaddress(to_intf):
